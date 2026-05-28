@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    image: docker.io/library/mysql:8.0
+    container_name: dnd_mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    networks:
+      - dnd-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: dnd_backend
+    ports:
+      - "3030:3030"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - dnd-network
+    depends_on:
+      - mysql-db
+  
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: dnd_frontend
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - dnd-network
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
+
+networks:
+  dnd-network:
+    driver: bridge
