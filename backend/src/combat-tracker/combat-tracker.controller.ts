@@ -1,34 +1,41 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException } from '@nestjs/common';
 import { CombatTrackerService } from './combat-tracker.service';
-import { CreateCombatTrackerDto } from './dto/create-combat-tracker.dto';
-import { UpdateCombatTrackerDto } from './dto/update-combat-tracker.dto';
+import { CreateCombatTrackerDto,UpdateCombatTrackerDto } from './dto/create-combat-tracker.dto';
 
-@Controller('combat-tracker')
+@Controller('rooms/:roomId/combat-tracker')
 export class CombatTrackerController {
   constructor(private readonly combatTrackerService: CombatTrackerService) {}
 
   @Post()
-  create(@Body() createCombatTrackerDto: CreateCombatTrackerDto) {
-    return this.combatTrackerService.create(createCombatTrackerDto);
+  addEntry(
+    @Param('roomId') roomId:number,
+    @Body() body: CreateCombatTrackerDto
+  ){
+    return this.combatTrackerService.addEntry(roomId,body.characterId,body.roll);
   }
 
-  @Get()
-  findAll() {
-    return this.combatTrackerService.findAll();
+  @Patch('sort')
+  sort(@Param('roomId') roomId:number){
+    return this.combatTrackerService.sort(roomId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.combatTrackerService.findOne(+id);
+  @Patch(':characterId')
+  updateRoll(
+    @Param('roomId') roomId:number,
+    @Param('characterId') characterId:number,
+    @Body() body: UpdateCombatTrackerDto,
+  ){
+    if(body.roll ===undefined) throw new BadRequestException("Roll is Missing");
+    return this.combatTrackerService.updateRoll(roomId,characterId,body.roll);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCombatTrackerDto: UpdateCombatTrackerDto) {
-    return this.combatTrackerService.update(+id, updateCombatTrackerDto);
+  @Delete('clear')
+  clearAll(@Param('roomId') roomId:number){
+    return this.combatTrackerService.clearAll(roomId);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.combatTrackerService.remove(+id);
+  removeEntry(@Param('id') id:number){
+    return this.combatTrackerService.removeEntry(id);
   }
 }

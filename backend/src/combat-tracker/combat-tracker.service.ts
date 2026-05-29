@@ -1,26 +1,77 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCombatTrackerDto } from './dto/create-combat-tracker.dto';
-import { UpdateCombatTrackerDto } from './dto/update-combat-tracker.dto';
+import { UpdateCombatTrackerDto } from './dto/create-combat-tracker.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CombatTracker } from './entities/combat-tracker.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class CombatTrackerService {
-  create(createCombatTrackerDto: CreateCombatTrackerDto) {
-    return 'This action adds a new combatTracker';
+  
+  constructor(
+    @InjectRepository(CombatTracker)
+    private trackerRepo: Repository<CombatTracker>,
+  ){}
+
+  async getAll(roomId:number){
+    return this.trackerRepo.find({
+      where: {room: {id:roomId}},
+      order: {order: 'ASC'}
+    });
   }
 
-  findAll() {
-    return `This action returns all combatTracker`;
+  async addEntry(roomId:number, characterId:number, roll:number){
+    const entry = this.trackerRepo.create({
+      roll,
+      room: { id: roomId},
+      character: {id:characterId},
+    });
+
+    return this.trackerRepo.save(entry);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} combatTracker`;
+  async sort(roomId:number){
+    const entries = await this.trackerRepo.find({
+      where: { room: {id:roomId}},
+      order: { roll: 'ASC'},
+    });
+
+    const updated = entries.map((entry,index)=>({
+      ...entry,
+      order:index,
+    }));
+
+    return this.trackerRepo.save(updated);
   }
 
-  update(id: number, updateCombatTrackerDto: UpdateCombatTrackerDto) {
-    return `This action updates a #${id} combatTracker`;
+  async updateRoll(roomId: number, characterId: number, roll: number) {
+  const entry = await this.trackerRepo.findOne({
+    where: { 
+      room: { id: roomId }, 
+      character: { id: characterId } 
+    },
+  });
+  
+  if (!entry) throw new NotFoundException('Entry not found');
+
+  entry.roll = roll;
+  return this.trackerRepo.save(entry);
+}
+
+  async removeEntry(id:number){
+    const entry= await this.trackerRepo.findOneBy({id});
+
+    if(!entry) throw new NotFoundException("Not Found");
+    return this.trackerRepo.remove(entry);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} combatTracker`;
+  async clearAll(roomId:number){
+    const entries = await this.trackerRepo.find({
+      where: { room: { id: roomId}},
+    });
+
+    return this.trackerRepo.remove(entries);
   }
+
+
 }
