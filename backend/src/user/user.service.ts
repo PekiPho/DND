@@ -1,26 +1,52 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './entities/user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  
+  constructor(
+    @InjectRepository(User)
+    private userRepo: Repository<User>,
+  ){}
+
+  async findById(id:number){
+    const user = await this.userRepo.findOneBy({id});
+
+    if(!user) throw new NotFoundException('User Not Found');
+    return user;
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findByUsername(username:string){
+    return this.userRepo.findOneBy({username});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async create(dto:CreateUserDto){
+    const existing = await this.findByUsername(dto.username);
+
+    if(existing) throw new ConflictException('Username Already Exists');
+
+    const passwordHash= await bcrypt.hash(dto.password,10);
+    const user= this.userRepo.create({username: dto.username,passwordHash});
+
+    return this.userRepo.save(user);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id:number,dto:UpdateUserDto){
+    const user= await this.findById(id);
+
+    if(dto.username) user.username= dto.username;
+    if(dto.password) user.passwordHash= await bcrypt.hash(dto.password,10);
+
+    return this.userRepo.save(user);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id:number){
+    const user = await this.findById(id);
+    return this.userRepo.remove(user);
   }
 }
