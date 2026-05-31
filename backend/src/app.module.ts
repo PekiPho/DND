@@ -11,9 +11,12 @@ import { SpellModule } from './spell/spell.module';
 import { UserModule } from './user/user.module';
 import { ItemModule } from './item/item.module';
 import { CombatTrackerModule } from './combat-tracker/combat-tracker.module';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'dnd_mysql_db',
@@ -34,6 +37,7 @@ import { CombatTrackerModule } from './combat-tracker/combat-tracker.module';
     UserModule,
     ItemModule,
     CombatTrackerModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

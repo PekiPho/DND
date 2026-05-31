@@ -3,32 +3,32 @@ import { TokenService } from './token.service';
 import { CreateTokenDto } from './dto/create-token.dto';
 import { UpdateTokenDto } from './dto/update-token.dto';
 
-@Controller('token')
+@Controller('maps/:mapId/tokens')
 export class TokenController {
   constructor(private readonly tokenService: TokenService) {}
 
-  @Post()
-  create(@Body() createTokenDto: CreateTokenDto) {
-    return this.tokenService.create(createTokenDto);
-  }
-
   @Get()
-  findAll() {
-    return this.tokenService.findAll();
+  getAll( @Param('mapId') mapId:number){
+    return this.tokenService.getAll(mapId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tokenService.findOne(+id);
+  getOne(@Param('mapId') mapId:number, @Param('id') id:number){
+    return this.tokenService.getOne(mapId,id);
+  }
+
+  @Post()
+  create(@Param('mapId') mapId:number, @Body() dto:CreateTokenDto){
+    return this.tokenService.create(mapId,dto);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTokenDto: UpdateTokenDto) {
-    return this.tokenService.update(+id, updateTokenDto);
+  update(@Param('mapId') mapId:number, @Param('id') id:number, @Body() dto:UpdateTokenDto){
+    return this.tokenService.update(mapId,id,dto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tokenService.remove(+id);
+  remove(@Param('mapId') mapId:number, @Param('id') id:number){
+    return this.tokenService.remove(mapId,id);
   }
 }

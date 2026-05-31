@@ -1,26 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSpellDto } from './dto/create-spell.dto';
 import { UpdateSpellDto } from './dto/update-spell.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Spell } from './entities/spell.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class SpellService {
-  create(createSpellDto: CreateSpellDto) {
-    return 'This action adds a new spell';
+  
+  constructor(
+    @InjectRepository(Spell)
+    private spellRepo: Repository<Spell>,
+  ) {}
+
+  async getAll(characterId: number) {
+    return this.spellRepo.find({
+      where: { character: { id: characterId } },
+    });
   }
 
-  findAll() {
-    return `This action returns all spell`;
+  async getOne(characterId: number, id: number) {
+    const spell = await this.spellRepo.findOne({
+      where: { id, character: { id: characterId } },
+    });
+    if (!spell) throw new NotFoundException('Spell not found');
+    return spell;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} spell`;
+  async create(characterId: number, dto: CreateSpellDto) {
+    const spell = this.spellRepo.create({
+      ...dto,
+      character: { id: characterId },
+    });
+    return this.spellRepo.save(spell);
   }
 
-  update(id: number, updateSpellDto: UpdateSpellDto) {
-    return `This action updates a #${id} spell`;
+  async update(characterId: number, id: number, dto: UpdateSpellDto) {
+    const spell = await this.getOne(characterId, id);
+    Object.assign(spell, dto);
+    return this.spellRepo.save(spell);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} spell`;
+  async remove(characterId: number, id: number) {
+    const spell = await this.getOne(characterId, id);
+    return this.spellRepo.remove(spell);
   }
 }

@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Map } from "../../map/entities/map.entity";
 import { Character } from "../../character/entities/character.entity";
+import { MapLayer } from "../../map/entities/map-layer.entity";
 
 
 @Entity('tokens')
@@ -41,5 +42,8 @@ export class Token {
 
     @ManyToOne(()=> Character, (character)=> character.tokens, {nullable:true,onDelete:'CASCADE'})
     character!:Character;
+
+    @ManyToOne(() => MapLayer, { nullable: true, onDelete: 'SET NULL' })
+    layer!: MapLayer;
 
 }

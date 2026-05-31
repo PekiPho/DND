@@ -1,8 +1,12 @@
 import { Module } from '@nestjs/common';
 import { CharacterService } from './character.service';
 import { CharacterController } from './character.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Character } from './entities/character.entity';
+import { Room } from '../room/entities/room.entity';
 
 @Module({
+  imports: [TypeOrmModule.forFeature([Character,Room])],
   controllers: [CharacterController],
   providers: [CharacterService],
 })

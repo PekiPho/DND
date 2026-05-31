@@ -1,1 +1,12 @@
-export class CreateSpellDto {}
+
+export class CreateSpellDto {
+  name!: string;
+  school?: string;
+  level?: number;
+  castingTime?: number;
+  components?: string[];
+  description?: string;
+  range?: string;
+  duration?: string;
+  effects?: any;
+}

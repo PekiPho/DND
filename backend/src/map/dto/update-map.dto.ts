@@ -1,4 +1,16 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateMapDto } from './create-map.dto';
+export class UpdateMapLayerDto {
+  name?: string;
+  zIndex?: number;
+  isVisible?: boolean;
+  imageUrl?: string;
+  gridX?: number;
+  gridY?: number;
+  scaleX?: number;
+  scaleY?: number;
+  rotation?: number;
+}
 
-export class UpdateMapDto extends PartialType(CreateMapDto) {}
+export class UpdateMapDto {
+  name?: string;
+  isActive?: boolean;
+}

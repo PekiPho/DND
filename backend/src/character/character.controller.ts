@@ -3,32 +3,37 @@ import { CharacterService } from './character.service';
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { UpdateCharacterDto } from './dto/update-character.dto';
 
-@Controller('character')
+@Controller('characters')
 export class CharacterController {
   constructor(private readonly characterService: CharacterService) {}
 
-  @Post()
-  create(@Body() createCharacterDto: CreateCharacterDto) {
-    return this.characterService.create(createCharacterDto);
+  @Get()
+  getAll() {
+    return this.characterService.getAll();
   }
 
-  @Get()
-  findAll() {
-    return this.characterService.findAll();
+  @Get('user/:userId')
+  getByUser(@Param('userId') userId: number) {
+    return this.characterService.getByUser(userId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.characterService.findOne(+id);
+  getOne(@Param('id') id: number) {
+    return this.characterService.getOne(id);
+  }
+
+  @Post()
+  create(@Body() dto: CreateCharacterDto) {
+    return this.characterService.create(dto);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCharacterDto: UpdateCharacterDto) {
-    return this.characterService.update(+id, updateCharacterDto);
+  update(@Param('id') id: number, @Body() dto: UpdateCharacterDto) {
+    return this.characterService.update(id, dto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.characterService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.characterService.remove(id);
   }
 }

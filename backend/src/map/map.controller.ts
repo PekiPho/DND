@@ -7,28 +7,37 @@ import { UpdateMapDto } from './dto/update-map.dto';
 export class MapController {
   constructor(private readonly mapService: MapService) {}
 
-  @Post()
-  create(@Body() createMapDto: CreateMapDto) {
-    return this.mapService.create(createMapDto);
-  }
-
   @Get()
-  findAll() {
-    return this.mapService.findAll();
+  getAll(@Param('roomId') roomId: number) {
+    return this.mapService.getAll(roomId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.mapService.findOne(+id);
+  getOne(@Param('roomId') roomId: number, @Param('id') id: number) {
+    return this.mapService.getOne(roomId, id);
+  }
+
+  @Post()
+  create(@Param('roomId') roomId: number, @Body() dto: CreateMapDto) {
+    return this.mapService.create(roomId, dto);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMapDto: UpdateMapDto) {
-    return this.mapService.update(+id, updateMapDto);
+  update(
+    @Param('roomId') roomId: number,
+    @Param('id') id: number,
+    @Body() dto: UpdateMapDto,
+  ) {
+    return this.mapService.update(roomId, id, dto);
+  }
+
+  @Patch(':id/set-active')
+  setActive(@Param('roomId') roomId: number, @Param('id') id: number) {
+    return this.mapService.setActive(roomId, id);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.mapService.remove(+id);
+  remove(@Param('roomId') roomId: number, @Param('id') id: number) {
+    return this.mapService.remove(roomId, id);
   }
 }

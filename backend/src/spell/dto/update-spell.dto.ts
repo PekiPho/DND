@@ -1,4 +1,12 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateSpellDto } from './create-spell.dto';
 
-export class UpdateSpellDto extends PartialType(CreateSpellDto) {}
+export class UpdateSpellDto {
+  name?: string;
+  school?: string;
+  level?: number;
+  castingTime?: number;
+  components?: string[];
+  description?: string;
+  range?: string;
+  duration?: string;
+  effects?: any;
+}
