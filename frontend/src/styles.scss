@@ -1,1 +1,268 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=IM+Fell+DW+Pica&display=swap');
+
+:root {
+  --bg-color: #eaddc3;
+  --card-bg: #fcf8f0;
+  --card-border: 3px double #5c4033;
+  --card-shadow: 5px 5px 15px rgba(43, 26, 9, 0.2);
+  
+  --text-title: #6b1d1d;
+  --text-primary: #2b1a09;
+  --text-secondary: #5c4033;
+  
+  --input-bg: #faf4e8;
+  --input-border: 1px solid #8b5a2b;
+  --input-focus: #6b1d1d;
+  
+  --btn-bg: #4a2c11;
+  --btn-hover: #5c3716;
+  --btn-text: #fcf8f0;
+  --btn-border: 1px solid #d4af37;
+  
+  --error-bg: #f5ebe6;
+  --error-border: #8b0000;
+  --error-text: #8b0000;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #120c06;
+    --card-bg: #1c140c;
+    --card-border: 3px double #8b5a2b;
+    --card-shadow: 10px 10px 25px rgba(0, 0, 0, 0.7);
+    
+    --text-title: #d35400;
+    --text-primary: #e6dfd3;
+    --text-secondary: #a88b70;
+    
+    --input-bg: #0f0a05;
+    --input-border: 1px solid #5c3e21;
+    --input-focus: #d35400;
+    
+    --btn-bg: #8b5a2b;
+    --btn-hover: #a06b38;
+    --btn-text: #1c140c;
+    --btn-border: 1px solid #e67e22;
+    
+    --error-bg: #2d1212;
+    --error-border: #8b0000;
+    --error-text: #ffb3b3;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg-color);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'IM Fell DW Pica', 'Georgia', serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  overflow: hidden;
+}
+
+body::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(rgba(0,0,0,0.015) 50%, transparent 50%);
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  min-height: 100vh;
+  z-index: 2;
+}
+
+.auth-card {
+  background: var(--card-bg);
+  border: var(--card-border);
+  padding: 3.5rem 3rem;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: var(--card-shadow);
+  text-align: center;
+  position: relative;
+  animation: floatCard 6s ease-in-out infinite, fadeIn 0.4s ease-out;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 10px; left: 10px; right: 10px; bottom: 10px;
+    border: 1px solid rgba(139, 90, 43, 0.15);
+    pointer-events: none;
+  }
+
+  h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 2.3rem;
+    font-weight: 800;
+    margin-bottom: 0.4rem;
+    color: var(--text-title);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .subtitle {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 2.2rem;
+    font-style: italic;
+  }
+}
+
+.form-group {
+  margin-bottom: 1.6rem;
+  text-align: left;
+
+  label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: 'Cinzel', serif;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background: var(--input-bg);
+    border: var(--input-border);
+    border-radius: 2px;
+    color: var(--text-primary);
+    font-size: 1.05rem;
+    font-family: 'IM Fell DW Pica', 'Georgia', serif;
+    transition: all 0.2s ease;
+
+    &::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.5;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--input-focus);
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
+      background: #fff;
+    }
+  }
+}
+
+button.submit, button[type="submit"] {
+  width: 100%;
+  padding: 0.9rem;
+  background: var(--btn-bg);
+  border: var(--btn-border);
+  border-radius: 2px;
+  color: var(--btn-text);
+  font-family: 'Cinzel', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+  margin-top: 1rem;
+
+  &:hover:not(:disabled) {
+    background: var(--btn-hover);
+    box-shadow: 3px 3px 12px rgba(0, 0, 0, 0.4);
+  }
+
+  &:active:not(:disabled) {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  &:disabled {
+    background: #302621;
+    color: #5c4e48;
+    border: 1px solid #1f1815;
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.5;
+  }
+}
+
+.auth-footer {
+  margin-top: 2rem;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+
+  p {
+    font-style: italic;
+  }
+
+  a {
+    color: var(--text-title);
+    text-decoration: none;
+    font-weight: 600;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.5px;
+    border-bottom: 1px dashed var(--text-title);
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: var(--btn-bg);
+      border-bottom-style: solid;
+    }
+  }
+}
+
+.error-banner {
+  background: var(--error-bg);
+  border: 1px solid var(--error-border);
+  color: var(--error-text);
+  padding: 0.8rem;
+  border-radius: 2px;
+  margin-bottom: 1.8rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes floatCard {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}

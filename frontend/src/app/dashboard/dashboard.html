@@ -1,1 +1,123 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+    <header class="dashboard-header">
+        <div class="logo">
+            <h2>Orion</h2>
+        </div>
+        <div class="user-meta">
+            <span>
+                Greetings, {{currentUser.username}}
+            </span>
+            <button class="btn-logout" (click)="logout()">Leave</button>
+        </div>
+    </header>
+    <div class="error-banner" *ngIf="error$ | async as error">
+        {{error}}
+    </div>
+
+    <section class="actions-bar">
+        <div class="join-box">
+            <h3>Request Entry to a Room</h3>
+            <form class="join-form" [formGroup]="joinForm" (ngSubmit)="onJoinRoom()">
+                <input type="number" formControlName="roomId" placeholder="Room ID">
+                <input type="password" formControlName="password" placeholder="Room Password">
+                <button type="submit" [disabled]="joinForm.invalid || (isLoading$ | async)" >Enter</button>
+            </form>
+        </div>
+        <div class="create-trigger">
+            <button class="btn-create" (click)="showCreateModal = true">Create a Campaign</button>
+        </div>
+    </section>
+
+    <main class="campaigns-sections">
+    <section class="accordion-section">
+      <div class="accordion-header" (click)="isMyRoomsOpen = !isMyRoomsOpen">
+        <h3>
+          <span class="arrow">{{ isMyRoomsOpen ? '▼' : '▶' }}</span>
+          Hosted Campaigns (DM)
+          <span class="badge" *ngIf="myRooms$ | async as myRooms">({{ myRooms.length }})</span>
+        </h3>
+      </div>
+      
+      <div class="accordion-body" *ngIf="isMyRoomsOpen">
+        <div class="cards-list" *ngIf="myRooms$ | async as myRooms">
+          <div class="card" *ngFor="let room of myRooms">
+            <div class="card-header">
+              <h4>{{ room.name }}</h4>
+              <span class="room-id">ID: {{ room.id }}</span>
+            </div>
+            <p class="card-desc" *ngIf="room.description">{{ room.description }}</p>
+            <p class="card-desc empty-desc" *ngIf="!room.description">No description scribed yet...</p>
+            <div class="card-footer">
+              <span class="meta">Players: {{ room.players?.length || 0 }}/{{ room.maxPlayers }}</span>
+              <button class="btn-enter" [routerLink]="['/room', room.id]">Enter Room</button>
+            </div>
+          </div>
+          <div class="empty-state" *ngIf="myRooms.length === 0">
+            <p>You have not created any campaigns yet.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="accordion-section">
+      <div class="accordion-header" (click)="isJoinedRoomsOpen = !isJoinedRoomsOpen">
+        <h3>
+          <span class="arrow">{{ isJoinedRoomsOpen ? '▼' : '▶' }}</span>
+          Joined Campaigns (Player)
+          <span class="badge" *ngIf="joinedRooms$ | async as joinedRooms">({{ joinedRooms.length }})</span>
+        </h3>
+      </div>
+      <div class="accordion-body" *ngIf="isJoinedRoomsOpen">
+        <div class="cards-list" *ngIf="joinedRooms$ | async as joinedRooms">
+          <div class="card" *ngFor="let room of joinedRooms">
+            <div class="card-header">
+              <h4>{{ room.name }}</h4>
+              <span class="room-id">ID: {{ room.id }}</span>
+            </div>
+            <p class="card-desc" *ngIf="room.description">{{ room.description }}</p>
+            <p class="card-desc empty-desc" *ngIf="!room.description">No description scribed yet...</p>
+            <div class="card-footer">
+              <span class="meta">DM: {{ room.host?.username }}</span>
+              <span class="meta">Players: {{ room.players?.length || 0 }}/{{ room.maxPlayers }}</span>
+              <div class="btn-group">
+                <button class="btn-enter" [routerLink]="['/room', room.id]">Enter</button>
+                <button class="btn-leave" (click)="onLeaveRoom(room.id)">Leave</button>
+              </div>
+            </div>
+          </div>
+          <div class="empty-state" *ngIf="joinedRooms.length === 0">
+            <p>You have not joined any active campaigns.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div class="modal-overlay" *ngIf="showCreateModal">
+    <div class="modal-card">
+      <h3>Create New Campaign</h3>
+      <p class="modal-subtitle">Establish your rules</p>
+      
+      <form [formGroup]="createForm" (ngSubmit)="onCreateRoom()">
+        <div class="form-group">
+          <label>Campaign Name</label>
+          <input type="text" formControlName="name" placeholder="Name of your realm" />
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" formControlName="description" placeholder="A short scroll of details..." />
+        </div>
+        <div class="form-group">
+          <label>Room Password</label>
+          <input type="password" formControlName="password" placeholder="Passphrase to enter" />
+        </div>
+        <div class="form-group">
+          <label>Maximum Players</label>
+          <input type="number" formControlName="maxPlayers" />
+        </div>
+        <div class="modal-buttons">
+          <button type="submit" class="btn-submit" [disabled]="createForm.invalid || (isLoading$ | async)">Forge Room</button>
+          <button type="button" class="btn-close" (click)="showCreateModal = false">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

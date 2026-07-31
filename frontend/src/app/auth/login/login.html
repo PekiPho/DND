@@ -25,7 +25,7 @@
                 autocomplete="current-password"/>
             </div>
 
-            <button class="submit" [disabled]="loginForm.invalid || (isLoading$ |async)">
+            <button type="sumbit" class="submit" [disabled]="loginForm.invalid || (isLoading$ |async)">
                 <span *ngIf="isLoading$ | async; else loginText">Signing in...</span>
                 <ng-template #loginText>Sign In</ng-template>
             </button>

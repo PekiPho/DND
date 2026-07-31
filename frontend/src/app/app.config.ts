@@ -8,6 +8,8 @@ import { authFeature } from './core/state/auth/auth.reducer';
 import { provideEffects } from '@ngrx/effects';
 import { AuthEffects } from './core/state/auth/auth.effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { RoomEffects } from './core/room/room.effects';
+import { roomFeature } from './core/room/room.reducer';
 
 
 export const appConfig: ApplicationConfig = {
@@ -17,10 +19,11 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
 
     provideStore({
-      [authFeature.name]: authFeature.reducer
+      [authFeature.name]: authFeature.reducer,
+      [roomFeature.name]:roomFeature.reducer
     }),
 
-    provideEffects(AuthEffects),
+    provideEffects(AuthEffects,RoomEffects),
 
     provideStoreDevtools({
       maxAge: 25,

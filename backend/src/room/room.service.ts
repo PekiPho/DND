@@ -40,6 +40,7 @@ export class RoomService {
       maxPlayers: dto.maxPlayers,
       passwordHash,
       host: {id:userId},
+      description: dto.description,
     });
 
     return this.roomRepo.save(room);
@@ -90,6 +91,7 @@ export class RoomService {
     if (dto.name) room.name = dto.name;
     if (dto.maxPlayers) room.maxPlayers = dto.maxPlayers;
     if (dto.password) room.passwordHash = await bcrypt.hash(dto.password, 10);
+    if (dto.description !== undefined) room.description = dto.description;
 
     return this.roomRepo.save(room);
   }

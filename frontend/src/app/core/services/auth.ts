@@ -37,5 +37,24 @@ export class AuthService {
     getToken(): string | null {
       return localStorage.getItem('access_token');
     }
+
+    getCurrentUser():any{
+      const token = this.getToken();
+      if(!token) return null;
+      return decodeToken(token);
+    }
   
+}
+
+function decodeToken(token: string): any {
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    let payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const pad = payload.length % 4;
+    if (pad) payload += '='.repeat(4 - pad);
+    return JSON.parse(atob(payload));
+  } catch (e) {
+    return null;
+  }
 }

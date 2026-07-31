@@ -20,6 +20,9 @@ export class Room {
   @Column()
   passwordHash!: string;
 
+  @Column({nullable:true})
+  description? : string;
+
   @Column({ default: 5 })
   maxPlayers!: number;
 
