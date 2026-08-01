@@ -86,3 +86,15 @@
   opacity: 0.4;
   text-decoration: line-through;
 }
+
+
+.message.success {
+  border-left-color: #2ecc71 !important;
+  border-right-color: #2ecc71 !important;
+  background-color: rgba(46, 204, 113, 0.15) !important;
+}
+.message.failure {
+  border-left-color: #e74c3c !important;
+  border-right-color: #e74c3c !important;
+  background-color: rgba(231, 76, 60, 0.15) !important;
+}
