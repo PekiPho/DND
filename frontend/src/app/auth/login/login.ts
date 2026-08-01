@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { authFeature } from '../../core/state/auth/auth.reducer';
@@ -12,7 +12,7 @@ import { AsyncPipe, NgIf } from '@angular/common';
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
-export class Login {
+export class Login implements OnInit{
   private fb = inject(FormBuilder);
   private store = inject(Store);
 
@@ -23,6 +23,10 @@ export class Login {
 
   isLoading$= this.store.select(authFeature.selectIsLoading);
   error$ = this.store.select(authFeature.selectError);
+
+  ngOnInit(): void {
+    this.store.dispatch(AuthActions.clearError());
+  }
 
   onSubmit(): void{
     if(this.loginForm.valid){

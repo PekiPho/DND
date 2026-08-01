@@ -1,4 +1,5 @@
 import{createActionGroup,emptyProps,props} from '@ngrx/store';
+import { empty } from 'rxjs';
 
 
 export const AuthActions = createActionGroup({
@@ -13,6 +14,7 @@ export const AuthActions = createActionGroup({
         'Register Success': props<{token:string}>(),
         'Register Failure': props<{error:string}>(),
 
+        'Clear Error': emptyProps(),
         'Logout': emptyProps(),
     }
 })

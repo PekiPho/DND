@@ -1,0 +1,25 @@
+<div class="vtt-layout">
+  
+  <div class="left-section">
+    
+    <div class="initiative-tracker" *ngIf="isCombatActive">
+      <app-initiative-tracker></app-initiative-tracker>
+    </div>
+    
+    <main class="map-area">
+      <div class="map-header">
+        <button class="btn-toggle" *ngIf="isHost" (click)="toggleCombat()">
+          {{ isCombatActive ? 'End Combat' : 'Start Combat' }}
+        </button>
+      </div>
+      
+      <app-map class="map-wrapper"></app-map>
+    </main>
+
+  </div>
+
+  <aside class="sidebar right-panel">
+    <app-chat class="chat-wrapper" [roomId]="roomId"></app-chat>
+  </aside>
+
+</div>

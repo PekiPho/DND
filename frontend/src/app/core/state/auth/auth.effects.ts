@@ -39,7 +39,9 @@ export class AuthEffects {
                     catchError((err)=>
                         of(
                             AuthActions.registerFailure({
-                                error: err.error?.message || 'Registration failed.'
+                                error: Array.isArray(err.error?.message) 
+                                        ? err.error.message[0] 
+                                        : (err.error?.message || 'Registration failed.')
                             })
                         )
                     )

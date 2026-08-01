@@ -1,0 +1,23 @@
+<div class="chat-container">
+  <div #scrollContainer class="messages" (scroll)="onScroll($event)">
+    
+    <div *ngIf="isLoadingMore" class="loading-spinner">Loading older messages...</div>
+
+     <div *ngFor="let msg of (messages$ | async)" class="message" 
+         [class.self]="msg.username === username"
+         [class.roll]="msg.isRoll" 
+         [class.success]="msg.isComparison && msg.isSuccess" 
+         [class.failure]="msg.isComparison && !msg.isSuccess">
+         
+      <span class="user">{{ msg.username }}:</span> 
+      <span class="text" *ngIf="!msg.isRoll">{{ msg.message }}</span>
+      <span class="text" *ngIf="msg.isRoll" [innerHTML]="msg.safeHtml"></span>
+      
+    </div>
+  </div>
+  
+  <div class="chat-input">
+    <input type="text" [(ngModel)]="newMessage" (keyup.enter)="sendMessage()" placeholder="Type a message..." />
+    <button (click)="sendMessage()">Send</button>
+  </div>
+</div>

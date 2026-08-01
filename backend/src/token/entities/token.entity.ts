@@ -37,6 +37,12 @@ export class Token {
     @Column({nullable:true})
     imageUrl!:string;
 
+    @Column({ default: false })
+    inCombat!: boolean;
+    
+    @Column({ type: 'int', nullable: true })
+    initiative!: number | null;
+
     @ManyToOne(()=> Map, (map)=> map.tokens, {onDelete: 'CASCADE'})
     map!: Map;
 

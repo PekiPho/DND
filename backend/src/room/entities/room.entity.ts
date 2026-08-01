@@ -4,7 +4,6 @@ import { Chat } from "../../chat/entities/chat.entity";
 import { Map } from "../../map/entities/map.entity";
 import { Character } from "../../character/entities/character.entity";
 import { Item } from "../../item/entities/item.entity";
-import { CombatTracker } from "../../combat-tracker/entities/combat-tracker.entity";
 
 
 
@@ -20,8 +19,8 @@ export class Room {
   @Column()
   passwordHash!: string;
 
-  @Column({nullable:true})
-  description? : string;
+  @Column({type: 'text',nullable:true})
+  description! : string | null;
 
   @Column({ default: 5 })
   maxPlayers!: number;
@@ -41,9 +40,6 @@ export class Room {
 
   @OneToMany(() => Map, (map) => map.room)
   maps!: Map[];
-
-  @OneToMany(() => CombatTracker, (entry) => entry.room)
-  initiativeEntries!: CombatTracker[];
   
   @OneToMany(() => Chat, (chat) => chat.room)
   chats!: Chat[];

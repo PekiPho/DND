@@ -151,7 +151,7 @@ body::before {
     font-family: 'Cinzel', serif;
   }
 
-  input {
+  input, textarea {
     width: 100%;
     padding: 0.8rem 1rem;
     background: var(--input-bg);
@@ -161,6 +161,7 @@ body::before {
     font-size: 1.05rem;
     font-family: 'IM Fell DW Pica', 'Georgia', serif;
     transition: all 0.2s ease;
+    resize: vertical;
 
     &::placeholder {
       color: var(--text-secondary);
@@ -171,7 +172,7 @@ body::before {
       outline: none;
       border-color: var(--input-focus);
       box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
-      background: #fff;
+      background: var(--card-bg); 
     }
   }
 }

@@ -10,9 +10,9 @@ import { ChatModule } from './chat/chat.module';
 import { SpellModule } from './spell/spell.module';
 import { UserModule } from './user/user.module';
 import { ItemModule } from './item/item.module';
-import { CombatTrackerModule } from './combat-tracker/combat-tracker.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -36,8 +36,8 @@ import { ConfigModule } from '@nestjs/config';
     SpellModule,
     UserModule,
     ItemModule,
-    CombatTrackerModule,
     AuthModule,
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

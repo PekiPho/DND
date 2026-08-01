@@ -42,7 +42,7 @@ export class Dashboard implements OnInit{
     map(rooms => rooms.filter(r => r.host && r.host.id === this.currentUser?.userId))
   );
   joinedRooms$ = this.allRooms$.pipe(
-    map(rooms => rooms.filter(r => r.players && r.players.some((p: any) => p.id === this.currentUser?.userId)))
+    map(rooms => rooms.filter(r => r.players && r.players.some(p => p.id === this.currentUser?.userId)))
   );
 
   ngOnInit(): void {
@@ -60,7 +60,7 @@ export class Dashboard implements OnInit{
   private initForms(){
     this.createForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
-      description: ['', [Validators.maxLength(250)]],
+      description: ['', [Validators.maxLength(2000)]],
       password: ['', [Validators.required]],
       maxPlayers: [5, [Validators.required, Validators.min(1), Validators.max(20)]]
     });

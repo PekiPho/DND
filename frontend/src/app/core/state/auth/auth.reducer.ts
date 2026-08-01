@@ -38,6 +38,11 @@ export const authFeature = createFeature({
             error,
         })),
 
+        on(AuthActions.clearError, (state) => ({
+            ...state,
+            error: null,
+        })),
+
         on(AuthActions.logout, ()=>({
             token:null,
             isLoading:false,

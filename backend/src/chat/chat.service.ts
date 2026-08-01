@@ -16,6 +16,7 @@ export class ChatService {
   async getAll(roomId:number){
     return this.chatRepo.find({
       where: { room: {id: roomId}},
+      relations: {sender:true},
       order: { createdAt: 'ASC'},
     });
   }
@@ -33,6 +34,7 @@ export class ChatService {
 
   async getMessages(roomId:number, before?:number, limit = 50){
     const query = this.chatRepo.createQueryBuilder('chat')
+      .leftJoinAndSelect('chat.sender','sender')
       .where('chat.roomId = :roomId', {roomId})
       .orderBy('chat.createdAt', 'DESC')
       .take(limit);

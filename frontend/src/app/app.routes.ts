@@ -12,5 +12,10 @@ export const routes: Routes = [
     {
         path: 'dashboard',
         loadComponent: () => import('./dashboard/dashboard').then(m=> m.Dashboard)
-    }
+    },
+
+    {
+        path: 'room/:id',
+        loadComponent: () => import('./room/room.component').then(m => m.RoomComponent)
+    },
 ];
