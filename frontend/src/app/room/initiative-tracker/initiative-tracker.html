@@ -1,1 +1,93 @@
-<p>initiative-tracker works!</p>
+
+<div class="tracker-container">
+  
+    <div class="tracker-header">
+        <div class="round-badge">
+        <span class="label">Round</span>
+        <span class="number">{{ currentRound }}</span>
+        </div>
+
+        <div class="dm-controls" *ngIf="isHost">
+        <button class="btn-ctrl" (click)="prevTurn()" title="Previous Turn">◀</button>
+        <button class="btn-ctrl btn-next" (click)="nextTurn()" title="Next Turn">NEXT TURN ▶</button>
+        
+        <button class="btn-ctrl" (click)="toggleSortOrder()" title="Toggle Sort Direction">
+             {{ sortAscending ? '^' : 'v' }}
+        </button>
+
+        <button 
+            class="btn-ctrl" 
+            [class.active-toggle]="preserveOrder"
+            (click)="preserveOrder = !preserveOrder">
+             {{ preserveOrder ? 'Preserve: ON' : 'Preserve: OFF' }}
+        </button>
+
+        <div class="add-token-wrapper">
+            <button class="btn-ctrl btn-add" (click)="showAddDropdown = !showAddDropdown">+ Add Token</button>
+
+            <div class="add-dropdown" *ngIf="showAddDropdown">
+                <div class="dropdown-header">Map Tokens:</div>
+                
+                <div 
+                    *ngFor="let token of availableMapTokens" 
+                    class="dropdown-item"
+                    (click)="addMapTokenToCombat(token)">
+                    <span>{{ token.name }}</span>
+                    <span class="plus">+</span>
+                </div>
+
+                <div *ngIf="availableMapTokens.length === 0" class="dropdown-empty">
+                    All map tokens are in combat.
+                </div>
+
+                <div class="dropdown-divider"></div>
+
+                <div class="custom-add">
+                    <input 
+                    type="text" 
+                    [(ngModel)]="customTokenName" 
+                    placeholder="Or type mob name..." 
+                    (keyup.enter)="addCustomCombatant()"/>
+                    <button (click)="addCustomCombatant()">Add</button>
+                </div>
+            </div>
+        </div>
+            <button class="btn-ctrl btn-reset" (click)="resetCombat()" title="Clear All Combatants">Clear</button>
+        </div>
+    </div>
+
+    <div class="combatants-strip">
+        <div 
+        *ngFor="let token of combatants; let i = index" 
+        class="combatant-card"
+        [class.active-turn]="i === activeTurnIndex">
+        <div class="turn-indicator" *ngIf="i === activeTurnIndex">ACTIVE</div>
+        
+        <div class="card-avatar">
+            <img *ngIf="token.imageUrl" [src]="token.imageUrl" alt="Token" />
+            <div *ngIf="!token.imageUrl" class="avatar-placeholder">
+                {{ (token.name || 'T')[0].toUpperCase() }}
+            </div>
+        </div>
+
+        <div class="card-info">
+            <span class="name" [title]="token.name">{{ token.name || 'Token' }}</span>
+            
+            <div class="initiative-controls">
+            <input 
+                type="number" 
+                class="init-input"
+                [value]="token.initiative ?? 0"
+                (change)="updateInitiativeValue(token, $event)"
+                title="Click to manually edit initiative score"/>
+        </div>
+        </div>
+            <button *ngIf="isHost" class="btn-remove" (click)="removeFromCombat(token)" title="Remove from combat">×</button>
+        </div>
+
+        <div *ngIf="combatants.length === 0" class="no-combatants">
+            No tokens in initiative. Click "+ Add Token" or roll from a Character Sheet!
+        </div>
+    </div>
+
+</div>

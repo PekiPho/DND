@@ -1,5 +1,3 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateTokenDto } from './create-token.dto';
 
 export class UpdateTokenDto {
   gridX?: number;
@@ -12,4 +10,6 @@ export class UpdateTokenDto {
   zIndex?: number;
   imageUrl?: string;
   layerId?: number;
+  inCombat?: boolean;
+  initiative?: number | null;
 }

@@ -55,4 +55,9 @@ export class EventsGateway{
 
         this.server.to(data.roomId).emit('chatMessage',data);
     }
+
+    @SubscribeMessage('updateInitiative')
+    handleUpdateInitiative(@MessageBody() data: { roomId: string; combatants: any[]; currentRound: number; activeTurnIndex: number }, @ConnectedSocket() client: Socket) {
+        this.server.to(data.roomId).emit('initiativeUpdated', data);
+    }
 }
